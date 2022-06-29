@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.valdir.helpdesk.services.exceptions.ObjectnotFoundException;
 
-import javassist.tools.rmi.ObjectNotFoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
