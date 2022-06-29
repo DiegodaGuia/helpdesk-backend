@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.valdir.helpdesk.domain.Tecnico;
 import com.valdir.helpdesk.domain.dtos.TecnicoDTO;
@@ -27,5 +25,11 @@ public class TecnicoService {
 
 	public List<Tecnico> findAll() {
 		return repository.findAll();
+	}
+
+	public Tecnico create(TecnicoDTO objDTO) {
+		objDTO.setId(null);
+		Tecnico newObj = new Tecnico(objDTO);
+		return repository.save(newObj);
 	}
 }
