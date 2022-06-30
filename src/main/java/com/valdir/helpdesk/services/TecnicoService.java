@@ -16,7 +16,6 @@ import com.valdir.helpdesk.repositories.TecnicoRepository;
 import com.valdir.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.valdir.helpdesk.services.exceptions.ObjectnotFoundException;
 
-
 @Service
 public class TecnicoService {
 
@@ -47,17 +46,28 @@ public class TecnicoService {
 		validaPorCpfEEmail(objDTO);
 		oldObj = new Tecnico(objDTO);
 		return repository.save(oldObj);
-		
+
 	}
-	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
-		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
-		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("CPF já cadastrado no sistema");
+
+	public void delete(Integer id) {
+		Tecnico obj = findById(id);
+		if (obj.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("Tecnico possui chamados e não pode ser deletado! ");
 		}
 		
-		obj = pessoaRepository.findByEmail(objDTO.getEmail());
-		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema");
+		repository.deleteById(id);
 	}
-   }
+
+	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
+		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF já cadastrado no sistema");
+		}
+
+		obj = pessoaRepository.findByEmail(objDTO.getEmail());
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema");
+		}
+	}
+
 }
